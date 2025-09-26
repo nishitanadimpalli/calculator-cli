@@ -1,15 +1,20 @@
 # tests/test_cli_main.py
-from calculator import cli
+import subprocess
 
-def test_cli_main_line_coverage_safe():
-    """Cover CLI main safely without blocking stdin."""
+def test_cli_add():
+    """Test the CLI addition command."""
+    result = subprocess.run(
+        ["python", "-m", "calculator.cli", "add", "2", "3"],
+        capture_output=True,
+        text=True
+    )
+    assert result.stdout.strip() == "5"
 
-    # Fake input/output so REPL exits immediately
-    def fake_input(prompt=''):
-        return 'exit'  # stops the REPL immediately
-
-    def fake_print(*args):
-        pass
-
-    # Call CLI wrapper with fake input/output
-    cli._cli_main_wrapper(input_func=fake_input, output_func=fake_print)
+def test_cli_subtract():
+    """Test the CLI subtraction command."""
+    result = subprocess.run(
+        ["python", "-m", "calculator.cli", "subtract", "5", "2"],
+        capture_output=True,
+        text=True
+    )
+    assert result.stdout.strip() == "3"
