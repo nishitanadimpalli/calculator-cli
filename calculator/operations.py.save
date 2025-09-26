@@ -1,0 +1,25 @@
+# calculator/repl.py
+from .operations import operate
+
+def parse_number(s: str) -> float:
+    try:
+        return float(s.strip())
+    except Exception:
+        raise ValueError(f"Invalid number: {s!r}")
+
+def evaluate(op: str, a_str: str, b_str: str) -> float:
+    a = parse_number(a_str)
+    b = parse_number(b_str)
+    return operate(op, a, b)
+
+def run_repl(input_func=input, output_func=print):
+    while True:
+        try:
+            user_input = input_func("Enter operation (op a b) or 'quit': ").strip()
+            if user_input.lower() in ('quit', 'exit'):
+                break
+            op, a_str, b_str = user_input.split()
+            result = evaluate(op, a_str, b_str)
+            output_func(f"Result: {result}")
+        except Exception as e:
+            output_func(f"Error: {e}")
